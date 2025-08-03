@@ -10,6 +10,6 @@ app.use(cors({
 
 import BlogRouter from './routes/blog.route.js'
 
-app.use("/api/v1/blogs",BlogRouter)
+app.use("/api/v1",BlogRouter)
 
 export {app}

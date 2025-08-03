@@ -35,4 +35,38 @@ const createBlog = asyncHandler(async(req, res)=>{
 
 })
 
-export {createBlog}
+const getBlogs = asyncHandler( async(req, res)=>{
+    const blogs = await Blog.find().sort({ createdAt: -1});
+
+    if(blogs.length === 0){
+        throw new ApiError(404, "blogs not found")
+    }
+
+    return res.status(200)
+    .json( new ApiResponse(200, blogs, "All blogs fetched"))
+})
+
+const getBlog = asyncHandler( async(req, res)=>{
+    const blog = await Blog.findById(req.params.id)
+
+    if(!blog){
+        throw new ApiError(404, "Blog not found")
+    }
+     return res.status(200)
+     .json( new ApiResponse(200, blog, "blog fetched successfully"))
+})
+
+const deleteBlog = asyncHandler (async(req, res)=>{
+    const blog = await Blog.findById(req.params.id);
+
+    if(!blog){
+        throw new ApiError(404, "cant get the blog")
+    }
+
+    await Blog.findByIdAndDelete(req.params.id);
+
+    return res.status(200)
+    .json(new ApiResponse(200, null, "Post deleted successfully"))
+})
+
+export { createBlog, getBlogs, getBlog, deleteBlog }
